@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrajectoryDrawer : MonoBehaviour
 {
-    [SerializeField] private Player _player = null;
+    [SerializeField] private DiscShooter _player = null;
 
     private void Start()
     {
