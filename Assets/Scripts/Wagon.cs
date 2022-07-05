@@ -16,6 +16,8 @@ public class Wagon : Destroyable
     #region Methods
     protected override void Start()
     {
+        base.Start();
+
         Vector3 min = new Vector3(transform.position.x - _horizontalMovement, transform.position.y, transform.position.z);
         Vector3 max = new Vector3(transform.position.x + _horizontalMovement, transform.position.y, transform.position.z);
 

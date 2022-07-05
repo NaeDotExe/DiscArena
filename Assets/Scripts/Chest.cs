@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Chest : Destroyable
 {
- protected override   void Start()
+    protected override void Start()
     {
-        
+        base.Start();
     }
 }

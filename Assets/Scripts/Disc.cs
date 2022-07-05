@@ -57,6 +57,8 @@ public class Disc : MonoBehaviour
             return;
         }
 
+        Debug.LogFormat("Disc collided with {0}", destroyable.gameObject);
+
         destroyable.TakeDamage(_damage);
     }
     #endregion

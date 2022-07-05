@@ -7,15 +7,15 @@ public class DiscShooter : MonoBehaviour
     #region Attributes
     [SerializeField] private float _shootMultiplier = 10f;
     [SerializeField] private Vector3 _discStartPosition = Vector3.zero;
+    [SerializeField] private TrajectoryDrawer _trajectoryDrawer = null;
 
     private int _discCount = 5;
     [SerializeField] private Disc _currentDisc = null;
     private Vector3 _startPos = Vector3.zero;
     private Vector3 _currentPos = Vector3.zero;
-    private List<Disc> _pool = new List<Disc>();
 
     private Vector2 direction = Vector3.zero;
-
+    private List<Disc> _pool = new List<Disc>();
     #endregion
 
     #region Properties
@@ -38,8 +38,6 @@ public class DiscShooter : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -10)));
-
         if (Input.GetMouseButtonDown(0))
         {
             _startPos = Input.mousePosition;
@@ -50,7 +48,7 @@ public class DiscShooter : MonoBehaviour
             _currentPos = Input.mousePosition;
             direction = (_currentPos - _startPos).normalized; 
 
-            Debug.Log(direction);
+            //Debug.Log(direction);
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -71,6 +69,12 @@ public class DiscShooter : MonoBehaviour
         Vector3 convertedDirection = new Vector3(-direction.x, 0f, -direction.y);
 
         _currentDisc.AddForce(convertedDirection, _shootMultiplier);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(_discStartPosition, 0.5f);
     }
     #endregion
 }
