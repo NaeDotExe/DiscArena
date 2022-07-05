@@ -13,6 +13,9 @@ public class DiscShooter : MonoBehaviour
     private Vector3 _startPos = Vector3.zero;
     private Vector3 _currentPos = Vector3.zero;
     private List<Disc> _pool = new List<Disc>();
+
+    private Vector2 direction = Vector3.zero;
+
     #endregion
 
     #region Properties
@@ -28,24 +31,26 @@ public class DiscShooter : MonoBehaviour
     #endregion
 
     #region Methods
+    private void Start()
+    {
+        direction = Vector2.zero;
+    }
+
     private void Update()
     {
-        Debug.Log(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -10)));
+        //Debug.Log(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -10)));
 
         if (Input.GetMouseButtonDown(0))
         {
             _startPos = Input.mousePosition;
         }
 
-        Vector3 direction = Vector3.zero;
-
         if (Input.GetMouseButton(0))
         {
-            /*Vector3*/
-            _currentPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _currentPos = Input.mousePosition;
+            direction = (_currentPos - _startPos).normalized; 
 
-            Debug.Log(_currentPos);
-            direction = -(_currentPos - _startPos);
+            Debug.Log(direction);
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -61,21 +66,11 @@ public class DiscShooter : MonoBehaviour
             return;
         }
     }
-    private void ShootDisc(Vector3 direction)
+    private void ShootDisc(Vector2 direction)
     {
-        _currentDisc.AddForce(Vector3.forward + Vector3.left * 0.8f, _shootMultiplier);
-    }
+        Vector3 convertedDirection = new Vector3(-direction.x, 0f, -direction.y);
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(_discStartPosition, 0.5f);
-
-        Gizmos.color = Color.red;
-
-        Vector3 vec = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -10));
-        //Gizmos.DrawLine(_startPos, _currentPos);
-        Gizmos.DrawSphere(new Vector3(-vec.x, 1, -(vec.y + 10)), 0.5f);
+        _currentDisc.AddForce(convertedDirection, _shootMultiplier);
     }
     #endregion
 }
