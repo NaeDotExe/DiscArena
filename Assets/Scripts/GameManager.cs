@@ -6,13 +6,18 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     #region Attributes
+    [SerializeField] private DiscShooter _discShooter = null;
     [SerializeField] private List<Chest> _chests = new List<Chest>();
+
+    [Space]
+    [SerializeField] private VictoryDefeatPanel _victoryDefeatPanel = null;
 
     private int _destroyedCount = 0;
     #endregion
 
     #region Events
-    public UnityEvent OnLevelComplete = new UnityEvent();
+    public UnityEvent OnVictory = new UnityEvent();
+    public UnityEvent OnDefeat = new UnityEvent();
     #endregion
 
     #region Methods
@@ -27,6 +32,8 @@ public class GameManager : MonoBehaviour
         {
             chest.OnDestroyed.AddListener(() => OnChestDestroyed(chest));
         }
+
+        _discShooter.OnInstantiationDisabled.AddListener(Defeat);
     }
 
     private void OnChestDestroyed(Chest chest)
@@ -34,14 +41,20 @@ public class GameManager : MonoBehaviour
         ++_destroyedCount;
         if (_destroyedCount >= _chests.Count)
         {
-            LevelEnd(chest);
+            Victory(chest);
         }
     }
-    private void LevelEnd(Chest chest)
+    public void Victory(Chest chest)
     {
-        StartCoroutine(LevelEndCoroutine(chest));
+        StartCoroutine(VictoryCoroutine(chest));
     }
-    private IEnumerator LevelEndCoroutine(Chest chest)
+    public void Defeat()
+    {
+        OnDefeat.Invoke();
+
+        _victoryDefeatPanel.OnDefeat();
+    }
+    private IEnumerator VictoryCoroutine(Chest chest)
     {
         chest.SpawnCoins();
 
@@ -50,7 +63,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         Time.timeScale = 1f;
-        OnLevelComplete.Invoke();
+        OnVictory.Invoke();
+
+        _victoryDefeatPanel.OnVictory();
     }
     #endregion
 }

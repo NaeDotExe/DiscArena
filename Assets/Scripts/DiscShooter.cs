@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DiscShooter : MonoBehaviour
 {
@@ -10,8 +11,13 @@ public class DiscShooter : MonoBehaviour
     [SerializeField] private TrajectoryDrawer _trajectoryDrawer = null;
     [SerializeField] private TouchZone _touchZone = null;
     [SerializeField] private Disc _discPrefab = null;
+    [SerializeField]  private int _maxDiscCount = 5;
 
-    private int _discCount = 5;
+    [Space]
+    [SerializeField] private CameraShake _cameraShake = null;
+
+    private int _currentDiscCount = 0;
+    private bool _canInstantiate = true;
     private bool _isPointerDown = false;
     private Disc _currentDisc = null;
     private Vector3 _startPos = Vector3.zero;
@@ -20,15 +26,20 @@ public class DiscShooter : MonoBehaviour
     #endregion
 
     #region Properties
-    public int DiscCount
+    public int CurrentDiscCount
     {
-        get { return _discCount; }
-        set { _discCount = value; }
+        get { return _currentDiscCount; }
+        set { _currentDiscCount = value; }
     }
     public Disc CurrentDisc
     {
         get { return _currentDisc; }
     }
+    #endregion
+
+    #region Events
+    public UnityEvent OnInstantiationDisabled = new UnityEvent();
+    public UnityEvent<int> OnDiscCountUpdated = new UnityEvent<int>();
     #endregion
 
     #region Methods
@@ -39,6 +50,8 @@ public class DiscShooter : MonoBehaviour
         _touchZone.OnPointerClick.AddListener(OnPointerClick);
         _touchZone.OnPointerDown.AddListener(OnPointerDown);
         _touchZone.OnPointerUp.AddListener(OnPointerUp);
+
+        _currentDiscCount = 0;
     }
     private void Update()
     {
@@ -64,7 +77,7 @@ public class DiscShooter : MonoBehaviour
 
     private void InstantiateNewDisc()
     {
-        if (_discCount == 0)
+        if (!_canInstantiate)
         {
             return;
         }
@@ -79,6 +92,16 @@ public class DiscShooter : MonoBehaviour
         disc.Init();
 
         _currentDisc = disc;
+
+        ++_currentDiscCount;
+        if (_currentDiscCount == _maxDiscCount)
+        {
+            _canInstantiate = false;
+        }
+        else
+        {
+            OnDiscCountUpdated.Invoke(_maxDiscCount - _currentDiscCount);
+        }
     }
     private void ShootDisc(Vector2 direction)
     {
@@ -96,6 +119,18 @@ public class DiscShooter : MonoBehaviour
         _currentPos = Input.mousePosition;
         direction = Vector3.zero;
     }
+    public void OnDiscDestroyed()
+    {
+        if (!_canInstantiate)
+        {
+            OnInstantiationDisabled.Invoke();
+        }
+    }
+    public void OnDiscHitObstacle()
+    {
+        _cameraShake.Shake(0.15f, 0.4f);
+    }
+
 
     private void OnPointerDown()
     {

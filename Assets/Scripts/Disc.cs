@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Disc : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class Disc : MonoBehaviour
     }
     #endregion
 
+    #region Events
+    //public UnityEvent OnDestroyed = new UnityEvent();
+    #endregion
+
     #region Methods
     private void Update()
     {
@@ -33,11 +38,15 @@ public class Disc : MonoBehaviour
             {
                 if (Velocity.z < 2.5f && Velocity.z > -2.5f)
                 {
+                    // Use this instead
+                    //OnDestroyed.Invoke();
+
+                    FindObjectOfType<DiscShooter>().OnDiscDestroyed();
                     Destroy(gameObject);
                 }
             }
 
-            Debug.LogFormat("X : {0} || Y : {1}", Velocity.x, Velocity.z);
+            //Debug.LogFormat("X : {0} || Y : {1}", Velocity.x, Velocity.z);
         }
     }
 
@@ -82,6 +91,9 @@ public class Disc : MonoBehaviour
         }
 
         destroyable.TakeDamage(_damage);
+
+        // Use event instead
+        FindObjectOfType<DiscShooter>().OnDiscHitObstacle();
     }
     
     private IEnumerator IsThrownCoroutine()
