@@ -5,17 +5,18 @@ using UnityEngine;
 public class DiscShooter : MonoBehaviour
 {
     #region Attributes
-    [SerializeField] private float _shootMultiplier = 10f;
+    [SerializeField] private float _shootForceMultiplier = 25f;
     [SerializeField] private Vector3 _discStartPosition = Vector3.zero;
     [SerializeField] private TrajectoryDrawer _trajectoryDrawer = null;
+    [SerializeField] private TouchZone _touchZone = null;
+    [SerializeField] private Disc _discPrefab = null;
 
     private int _discCount = 5;
-    [SerializeField] private Disc _currentDisc = null;
+    private bool _isPointerDown = false;
+    private Disc _currentDisc = null;
     private Vector3 _startPos = Vector3.zero;
     private Vector3 _currentPos = Vector3.zero;
-
     private Vector2 direction = Vector3.zero;
-    private List<Disc> _pool = new List<Disc>();
     #endregion
 
     #region Properties
@@ -34,24 +35,30 @@ public class DiscShooter : MonoBehaviour
     private void Start()
     {
         direction = Vector2.zero;
-    }
 
+        _touchZone.OnPointerClick.AddListener(OnPointerClick);
+        _touchZone.OnPointerDown.AddListener(OnPointerDown);
+        _touchZone.OnPointerUp.AddListener(OnPointerUp);
+    }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _isPointerDown)
         {
             _startPos = Input.mousePosition;
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && _isPointerDown)
         {
             _currentPos = Input.mousePosition;
-            direction = (_currentPos - _startPos).normalized; 
+            direction = (_currentPos - _startPos).normalized;
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            ShootDisc(direction);
+            if (direction.x != 0 && direction.y != 0)
+            {
+                ShootDisc(direction);
+            }
         }
     }
 
@@ -61,13 +68,51 @@ public class DiscShooter : MonoBehaviour
         {
             return;
         }
+
+        Disc disc = Instantiate(_discPrefab, _discStartPosition, Quaternion.identity);
+        if (disc == null)
+        {
+            Debug.LogError("Failed to instantiate Disc!");
+            return;
+        }
+
+        disc.Init();
+
+        _currentDisc = disc;
     }
     private void ShootDisc(Vector2 direction)
     {
+        if (_currentDisc == null)
+        {
+            return;
+        }
+
         Vector3 convertedDirection = new Vector3(-direction.x, 0f, -direction.y);
 
-        _currentDisc.IsThrown = true;
-        _currentDisc.AddForce(convertedDirection, _shootMultiplier);
+        _currentDisc.AddForce(convertedDirection, _shootForceMultiplier);
+
+        _currentDisc = null;
+        _startPos = Vector3.zero;
+        _currentPos = Input.mousePosition;
+        direction = Vector3.zero;
+    }
+
+    private void OnPointerDown()
+    {
+        _isPointerDown = true;
+    }
+    private void OnPointerUp()
+    {
+        _isPointerDown = false;
+    }
+    private void OnPointerClick()
+    {
+        if (_currentDisc != null)
+        {
+            return;
+        }
+        
+        InstantiateNewDisc();
     }
 
     private void OnDrawGizmos()

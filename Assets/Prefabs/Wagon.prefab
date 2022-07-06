@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1594704578119605064}
   - component: {fileID: 1594704578119605071}
   - component: {fileID: 1594704578119605065}
+  - component: {fileID: 1723795349}
   m_Layer: 0
   m_Name: Wagon
   m_TagString: Untagged
@@ -47,11 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70dce9475b7b354448da606dad58bc87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 4
-  _hpForParticlesActivation: 2
-  _lifeBar: {fileID: 3896092779472048168}
-  _particleSystem: {fileID: 7768842121159688899}
-  _horizontalMovement: 5
+  _object: {fileID: 1594704578119605070}
+  _startMoveRight: 0
+  _moveSpeed: 2.5
+  _minX: -2
+  _maxX: 2
 --- !u!65 &1594704578119605065
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -65,6 +66,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1723795349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594704578119605070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c77b1c33dadc0948b4cb73f22e216d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHp: 4
+  _hpForParticlesActivation: 2
+  _lifeBar: {fileID: 3896092779472048168}
+  _particleSystem: {fileID: 7768842121159688899}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1594704577011338908
 PrefabInstance:
   m_ObjectHideFlags: 0

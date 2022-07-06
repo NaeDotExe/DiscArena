@@ -6,6 +6,7 @@ public class Disc : MonoBehaviour
 {
     #region Attributes
     [SerializeField] protected int _damage = 1;
+    [SerializeField] protected float _minVelocity = 1.0f;
 
     protected bool _isThrown = false;
     protected LineRenderer _lineRenderer = null;
@@ -16,7 +17,6 @@ public class Disc : MonoBehaviour
     public bool IsThrown
     {
         get { return _isThrown; }
-        set { _isThrown = value; }
     }
     public Vector3 Velocity
     {
@@ -25,7 +25,23 @@ public class Disc : MonoBehaviour
     #endregion
 
     #region Methods
-    protected void Start()
+    private void Update()
+    {
+        if (_isThrown)
+        {
+            if (Velocity.x < 2.5f && Velocity.x > -2.5f)
+            {
+                if (Velocity.z < 2.5f && Velocity.z > -2.5f)
+                {
+                    Destroy(gameObject);
+                }
+            }
+
+            Debug.LogFormat("X : {0} || Y : {1}", Velocity.x, Velocity.z);
+        }
+    }
+
+    public void Init()
     {
         _rigidbody = GetComponent<Rigidbody>();
         if (_rigidbody == null)
@@ -35,7 +51,7 @@ public class Disc : MonoBehaviour
         }
 
         _lineRenderer = GetComponent<LineRenderer>();
-        if(_lineRenderer == null)
+        if (_lineRenderer == null)
         {
             Debug.LogError("No Component LineRenderer found!");
             return;
@@ -53,6 +69,8 @@ public class Disc : MonoBehaviour
         _rigidbody.AddForce(direction * multiplier, ForceMode.Impulse);
 
         _lineRenderer.enabled = true;
+
+        StartCoroutine(IsThrownCoroutine());
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -63,9 +81,14 @@ public class Disc : MonoBehaviour
             return;
         }
 
-        Debug.LogFormat("Disc collided with {0}", destroyable.gameObject);
-
         destroyable.TakeDamage(_damage);
+    }
+    
+    private IEnumerator IsThrownCoroutine()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        _isThrown = true;
     }
     #endregion
 }
