@@ -7,7 +7,7 @@ public class HealthBar : MonoBehaviour
     #region Attributes
     [SerializeField] private SpriteRenderer _bar = null;
 
-    private Vector3 scale = Vector3.zero;
+    private Vector3 scale = Vector3.one;
     #endregion
 
     #region Methods

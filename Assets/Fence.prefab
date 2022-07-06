@@ -10,7 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3408954701706721043}
   - component: {fileID: 3408954701706721042}
-  - component: {fileID: 3408954701706721041}
+  - component: {fileID: 3408954701153395041}
+  - component: {fileID: 70213157739888660}
+  - component: {fileID: 2267320578748126227}
   m_Layer: 0
   m_Name: Fence
   m_TagString: Untagged
@@ -48,7 +50,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.5}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &3408954701706721041
+--- !u!114 &3408954701153395041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,17 +59,49 @@ MonoBehaviour:
   m_GameObject: {fileID: 3408954701706721052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a8cbb8e31ad89141abe7e5dec9daf57, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c77b1c33dadc0948b4cb73f22e216d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 4
   _hpForParticlesActivation: 2
   _lifeBar: {fileID: 6646868391447585192}
   _particleSystem: {fileID: 7263758697442794594}
-  _rotationSpeed: 5
-  _rotationDelay: 0.5
-  _minEuler: {x: 0, y: -90, z: 0}
-  _maxEuler: {x: 0, y: 90, z: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!95 &70213157739888660
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408954701706721052}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9cc2bcce85091934abf79caa3606af71, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2267320578748126227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408954701706721052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166f97282052b26429fcf89179e4533a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 70213157739888660}
+  _invertRotation: 0
 --- !u!1001 &1819438779218276538
 PrefabInstance:
   m_ObjectHideFlags: 0

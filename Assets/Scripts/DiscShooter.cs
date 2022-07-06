@@ -47,8 +47,6 @@ public class DiscShooter : MonoBehaviour
         {
             _currentPos = Input.mousePosition;
             direction = (_currentPos - _startPos).normalized; 
-
-            //Debug.Log(direction);
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -68,11 +66,14 @@ public class DiscShooter : MonoBehaviour
     {
         Vector3 convertedDirection = new Vector3(-direction.x, 0f, -direction.y);
 
+        _currentDisc.IsThrown = true;
         _currentDisc.AddForce(convertedDirection, _shootMultiplier);
     }
 
     private void OnDrawGizmos()
     {
+        return;
+
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(_discStartPosition, 0.5f);
     }

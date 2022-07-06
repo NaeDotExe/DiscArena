@@ -7,11 +7,17 @@ public class Disc : MonoBehaviour
     #region Attributes
     [SerializeField] protected int _damage = 1;
 
+    protected bool _isThrown = false;
     protected LineRenderer _lineRenderer = null;
     protected Rigidbody _rigidbody = null;
     #endregion
 
     #region Properties
+    public bool IsThrown
+    {
+        get { return _isThrown; }
+        set { _isThrown = value; }
+    }
     public Vector3 Velocity
     {
         get { return _rigidbody.velocity; }
