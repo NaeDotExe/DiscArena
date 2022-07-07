@@ -10,7 +10,7 @@ public class Disc : MonoBehaviour
     [SerializeField] protected float _minVelocity = 1.0f;
 
     protected bool _isThrown = false;
-    protected LineRenderer _lineRenderer = null;
+    //protected LineRenderer _lineRenderer = null;
     protected Rigidbody _rigidbody = null;
     #endregion
 
@@ -45,8 +45,6 @@ public class Disc : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
-
-            //Debug.LogFormat("X : {0} || Y : {1}", Velocity.x, Velocity.z);
         }
     }
 
@@ -59,15 +57,15 @@ public class Disc : MonoBehaviour
             return;
         }
 
-        _lineRenderer = GetComponent<LineRenderer>();
-        if (_lineRenderer == null)
-        {
-            Debug.LogError("No Component LineRenderer found!");
-            return;
-        }
+        //_lineRenderer = GetComponent<LineRenderer>();
+        //if (_lineRenderer == null)
+        //{
+        //    Debug.LogError("No Component LineRenderer found!");
+        //    return;
+        //}
     }
 
-    public void AddForce(Vector3 direction, float multiplier)
+    public void AddForce(Vector3 direction, float multiplier, ForceMode mode)
     {
         if (_rigidbody == null)
         {
@@ -75,9 +73,9 @@ public class Disc : MonoBehaviour
             return;
         }
 
-        _rigidbody.AddForce(direction * multiplier, ForceMode.Impulse);
+        _rigidbody.AddForce(direction * multiplier, mode);
 
-        _lineRenderer.enabled = true;
+        //_lineRenderer.enabled = true;
 
         StartCoroutine(IsThrownCoroutine());
     }

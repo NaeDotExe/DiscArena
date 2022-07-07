@@ -69,5 +69,10 @@ public class Destroyable : MonoBehaviour
 
         Destroy(gameObject);
     }
+
+    public void ShowHealthBar(bool show)
+    {
+        _lifeBar.gameObject.SetActive(show);
+    }
     #endregion
 }

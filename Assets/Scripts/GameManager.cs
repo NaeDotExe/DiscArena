@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [SerializeField] private VictoryDefeatPanel _victoryDefeatPanel = null;
+    [SerializeField] private Animator _camAnimator = null;
 
     private int _destroyedCount = 0;
     #endregion
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
         ++_destroyedCount;
         if (_destroyedCount >= _chests.Count)
         {
+            chest.ShowHealthBar(false);
+
             Victory(chest);
         }
     }
@@ -56,6 +59,11 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator VictoryCoroutine(Chest chest)
     {
+        _camAnimator.ResetTrigger("Victory");
+        _camAnimator.SetTrigger("Victory");
+
+        yield return new WaitForSeconds(0.5f);
+
         chest.SpawnCoins();
 
         Time.timeScale = 0.5f;

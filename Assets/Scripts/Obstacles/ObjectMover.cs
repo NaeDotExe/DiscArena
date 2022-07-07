@@ -15,7 +15,6 @@ public class ObjectMover : MonoBehaviour
     [SerializeField] private float _minX = -2f;
     [SerializeField] private float _maxX = 2f;
 
-    private int _currentPosition = 0;
     private bool _allowMovement = false;
     private bool _moveRight = true;
     #endregion

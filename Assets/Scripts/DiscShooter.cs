@@ -11,10 +11,12 @@ public class DiscShooter : MonoBehaviour
     [SerializeField] private TrajectoryDrawer _trajectoryDrawer = null;
     [SerializeField] private TouchZone _touchZone = null;
     [SerializeField] private Disc _discPrefab = null;
-    [SerializeField]  private int _maxDiscCount = 5;
+    [SerializeField] private int _maxDiscCount = 5;
 
     [Space]
     [SerializeField] private CameraShake _cameraShake = null;
+    [SerializeField] private float _shakeDuration = 0.15f;
+    [SerializeField] private float _shakeMagnitude = 0.2f;
 
     private int _currentDiscCount = 0;
     private bool _canInstantiate = true;
@@ -64,12 +66,21 @@ public class DiscShooter : MonoBehaviour
         {
             _currentPos = Input.mousePosition;
             direction = (_currentPos - _startPos).normalized;
+
+            Vector3 convertedDirection = new Vector3(-direction.x, 0f, -direction.y);
+
+            if (_currentDisc != null)
+            {
+                _trajectoryDrawer.DrawTrajectory(_currentDisc.gameObject, new Vector3(-direction.x, 0f, -direction.y) * _shootForceMultiplier, ForceMode.Impulse);
+            }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             if (direction.x != 0 && direction.y != 0)
             {
+                _trajectoryDrawer.Clear();
+
                 ShootDisc(direction);
             }
         }
@@ -112,7 +123,7 @@ public class DiscShooter : MonoBehaviour
 
         Vector3 convertedDirection = new Vector3(-direction.x, 0f, -direction.y);
 
-        _currentDisc.AddForce(convertedDirection, _shootForceMultiplier);
+        _currentDisc.AddForce(convertedDirection, _shootForceMultiplier, ForceMode.Impulse);
 
         _currentDisc = null;
         _startPos = Vector3.zero;
@@ -128,9 +139,13 @@ public class DiscShooter : MonoBehaviour
     }
     public void OnDiscHitObstacle()
     {
-        _cameraShake.Shake(0.15f, 0.4f);
-    }
+        _cameraShake.Shake(_shakeDuration, _shakeMagnitude);
 
+#if UNITY_ANDROID || UNITY_IOS
+        Handheld.Vibrate();
+        //Vibration.Vibrate(10);
+#endif
+    }
 
     private void OnPointerDown()
     {
@@ -146,7 +161,7 @@ public class DiscShooter : MonoBehaviour
         {
             return;
         }
-        
+
         InstantiateNewDisc();
     }
 

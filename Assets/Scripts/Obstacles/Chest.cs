@@ -18,6 +18,8 @@ public class Chest : Destroyable
     {
         OnDestroyed.Invoke();
 
+        _lifeBar.gameObject.SetActive(false);
+
         //base.Destroy();
     }
 
