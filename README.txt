@@ -6,7 +6,7 @@ This game is a replica of the game Disc Arena.
 
 How to play : 
 
-Tap on the zone to spawn a disc
+Tap on the zone (depicted as the transparent rectangle) to spawn a disc
 THen drag your finger to throw it !
 
 Encountered issues :
